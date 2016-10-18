@@ -15,10 +15,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', routes);
 
-app.get('/ok', function(req, res){
-    console.log('GET to /ok');
-});
-
 app.get('/json', function(req, res){
     console.log('GET to /json');
     res
