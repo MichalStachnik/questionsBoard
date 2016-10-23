@@ -3,5 +3,10 @@
         "name": "Question 1",
         "author": "some user",
         "question": "why is this so cool"
+    },
+    {
+        "name": "Question 2",
+        "author": "some user2",
+        "question": "this is pretty cool2"
     }
 ]

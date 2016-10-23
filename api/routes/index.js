@@ -7,4 +7,8 @@ router
     .route('/questions')
     .get(crtlQuestions.questionsGetAll);
 
+router
+    .route('/questions/:qId')
+    .get(crtlQuestions.questionsGetOne);
+
 module.exports = router;
