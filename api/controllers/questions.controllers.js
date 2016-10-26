@@ -1,6 +1,11 @@
+var dbConn = require('../data/dbConnection.js');
 var questionData = require('../data/data.json');
 
 module.exports.questionsGetAll = function(req, res){
+    
+    var db = dbConn.get();
+    
+    console.log('db', db);
     
     console.log('GET all questions');
     res
@@ -18,3 +23,11 @@ module.exports.questionsGetOne = function(req, res){
         .status(200)
         .json(thisQuestion);
 };
+
+module.exports.questionsNew = function(req, res){
+    console.log("Post to new");
+    console.log(req.body);
+    res
+        .status(200)
+        .json(req.body);
+}
