@@ -1,60 +1,56 @@
-var dbConn = require('../data/dbConnection.js');
-var questionData = require('../data/data.json');
-var ObjectId = require('mongodb').ObjectId;
+var mongoose = require('mongoose');
+var question = mongoose.model('question');
 
 module.exports.questionsGetAll = function(req, res){
     
-    var db = dbConn.get();
-    var collection = db.collection('questions');
-    
-    collection
+    question
         .find()
-        .toArray(function(err, data){
-            console.log('found these questions', data);
-    
-            res
-                .status(200)
-                .json(data); 
+        .exec(function(err, questions){
+        console.log('found these questions', questions.length)
+        res
+            .json(questions); 
     });
-    
-//    console.log('db', db);
-//    
-//    console.log('GET all questions');
-//    res
-//        .status(200)
-//        .json(questionData);
 };
 
 module.exports.questionsGetOne = function(req, res){
     
-    var db = dbConn.get();
-    var collection = db.collection('questions');
-    
     var questionId = req.params.qId;
-    //var thisQuestion = questionData[questionId];
     console.log('GET to ' + questionId);
     
-    collection
-        .findOne({
-            _id : ObjectId(questionId)
-    }, function(err, data){
+    question
+        .findById(questionId)
+        .exec(function(err, data){
             res
                 .status(200)
                 .json( data );
     });
-    
-//    res
-//        .status(200)
-//        .json(thisQuestion);
 };
 
 module.exports.questionsNew = function(req, res){
     
     var db = dbConn.get();
+    var collection = db.collection('questions');
     
-    console.log("Post to new");
-    console.log(req.body);
-    res
-        .status(200)
-        .json(req.body);
+    console.log("Post to new question");
+    
+    if(req.body && req.body.name && req.body.question){
+        console.log(req.body);
+        collection.insertOne(req.body, function(err, response){
+            if(err){
+                console.log(err);
+            }
+            else{
+            console.log(response.ops);
+            res
+                .status(201)
+                .json(response.ops);
+            }
+        });
+    }
+    else{
+        console.log('data missing from request body');
+        res
+            .status(400)
+            .json({ message : "data missing from request body" });
+    }
 }
